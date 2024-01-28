@@ -18,11 +18,7 @@ const Header = (props) => {
   }
 
 }
-const Display = (props) =>{
-  return(
-    <div>{props.title}: {props.counter}</div>
-  )
-}
+
 const Button = (props) => {
   return (
     <button onClick={props.onClick}>
@@ -30,43 +26,74 @@ const Button = (props) => {
     </button>
   )
 }
+const Statistics = (props) => {
+
+  return(
+    <div>
+    <p>Good: {props.feedback.good}</p>
+    <p>Neutral: {props.feedback.neutral}</p>
+    <p>Bad: {props.feedback.bad}</p>
+    <p>All Feedback: {props.feedback.allFeedback}</p>
+    <p>Average: {props.feedback.average}</p>
+    <p>Positive Feedback: {props.feedback.positiveFeedback}%</p>
+  </div>
+  )
+
+  
+}
 
 const App = () => {
 
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [allFeedback, setAllFeedback] = useState(0)
-  const [average, setAverage] = useState(0)
-  const [positiveFeedback, setPositiveFeedback] = useState(0)
+  const [feedback, setFeedback] = useState({
+    good:0,
+    neutral:0,
+    bad: 0,
+    allFeedback:0,
+    average: 0,
+    positiveFeedback: 0,
+  })
+  
   
   const goodButtonIncreaseByOne = () => {
-    setGood(good + 1)
-    setAllFeedback(allFeedback+1)
+    setFeedback(prevFeedback => ({
+      ...prevFeedback,
+      good: prevFeedback.good + 1,
+      allFeedback: prevFeedback.allFeedback + 1,
+    }));
+    calculateAverage();
   }
  
   const badButtonIncreaseByOne = () => {
-    setBad(bad + 1)
-    setAllFeedback(allFeedback+1)
+    setFeedback(prevFeedback => ({
+      ...prevFeedback,
+      bad: prevFeedback.bad + 1,
+      allFeedback: prevFeedback.allFeedback + 1, 
+    }));
+    calculateAverage();
    
   }
   const neutralButtonIncreaseByOne = () => {
-    setNeutral(neutral + 1)
-    setAllFeedback(allFeedback+1)
+    setFeedback(prevFeedback => ({
+      ...prevFeedback,
+      neutral: prevFeedback.neutral + 1,
+      allFeedback: prevFeedback.allFeedback + 1,
+    }));
+    calculateAverage();
     
   }
 
   const calculateAverage=()=>{
+    setFeedback(prevFeedback =>({
+      ...prevFeedback,
+      average: (prevFeedback.good - prevFeedback.bad)/ prevFeedback.allFeedback || 0,
+      positiveFeedback : ((prevFeedback.good / prevFeedback.allFeedback) * 100) || 0,
+    }))
     
-    setAverage((good - bad) / allFeedback || 0);
-   
-    setPositiveFeedback((good / allFeedback) * 100 || 0);
+    ;
   
  }
 
- useEffect(() => {
-  calculateAverage();
-}, [good, bad, allFeedback, average]);
+
  
 
   return (
@@ -77,12 +104,8 @@ const App = () => {
       <Button onClick={neutralButtonIncreaseByOne} text={"Neutral"}/>
       <Button onClick={badButtonIncreaseByOne} text={"Bad"}/>
       <Header title={"Statistics"} headingLevel={"h2"}/>
-      <Display counter={good} title={"Good"} />
-      <Display counter={neutral} title={"Neutral"}/>
-      <Display counter={bad} title={"Bad"}/>
-      <Display counter={allFeedback} title={"All"}/>
-      <Display counter={average} title={"Average"}/>
-      <Display counter={positiveFeedback} title={"Positive"}/>
+      <Statistics feedback={feedback} />
+      
       
       
     
