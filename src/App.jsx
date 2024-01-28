@@ -27,18 +27,42 @@ const Button = (props) => {
   )
 }
 const Statistics = (props) => {
+  if(props.feedback.allFeedback === 0){
+    return (
+      <div>
+        No feedback given yet!
+      </div>
+    )
+  }else{
 
-  return(
-    <div>
-    <p>Good: {props.feedback.good}</p>
-    <p>Neutral: {props.feedback.neutral}</p>
-    <p>Bad: {props.feedback.bad}</p>
-    <p>All Feedback: {props.feedback.allFeedback}</p>
-    <p>Average: {props.feedback.average}</p>
-    <p>Positive Feedback: {props.feedback.positiveFeedback}%</p>
-  </div>
-  )
+    return(
+      <div>
+      <StatisticsLine text={"Good: "} value={props.feedback.good}/>
+      <StatisticsLine text={"Neutral: "} value={props.feedback.neutral}/>
+      <StatisticsLine text={"Bad: "} value={props.feedback.bad}/>
+      <StatisticsLine text={"All feedback: "} value={props.feedback.allFeedback}/>
+      <StatisticsLine text={"Average: "} value={props.feedback.average}/>
+      <StatisticsLine text={"Positive Feedback: "} value={props.feedback.positiveFeedback} specialCharacter={"%"}/>
+    </div>
+    )
 
+  }
+
+  
+}
+
+const StatisticsLine = (props) =>{
+  if(props.specialCharacter === undefined || props.specialCharacter === null){
+    
+    return(
+      <div>{props.text}{props.value}{""}</div>
+    )
+
+  }else{
+    return(
+      <div>{props.text}{props.value}{props.specialCharacter}</div>
+    )
+  }
   
 }
 
@@ -87,28 +111,17 @@ const App = () => {
       ...prevFeedback,
       average: (prevFeedback.good - prevFeedback.bad)/ prevFeedback.allFeedback || 0,
       positiveFeedback : ((prevFeedback.good / prevFeedback.allFeedback) * 100) || 0,
-    }))
-    
-    ;
-  
- }
-
-
- 
+    }));
+  }
 
   return (
     <>
-      
       <Header title={"Give feedback"} headingLevel={"h1"}/>
       <Button onClick={goodButtonIncreaseByOne} text={"Good"}/>
       <Button onClick={neutralButtonIncreaseByOne} text={"Neutral"}/>
       <Button onClick={badButtonIncreaseByOne} text={"Bad"}/>
       <Header title={"Statistics"} headingLevel={"h2"}/>
       <Statistics feedback={feedback} />
-      
-      
-      
-    
     </>
   )
 }
