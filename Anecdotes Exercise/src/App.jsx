@@ -2,13 +2,8 @@ import { useState } from 'react'
 
 const Content = (props) =>{
 
-  if(props.anecdote === undefined || props.anecdote === null){
-    
-    return(
-      <div>There is no anecdote yet! Please click the button.</div>
-    )
-
-  }else{
+  
+  
     return(
       <div>
         <p>{props.anecdote}</p>
@@ -16,7 +11,8 @@ const Content = (props) =>{
         <Button onClick={props.onClick} text={"Vote"}/>
       </div>
     )
-  }
+  
+  
   
     
   }
@@ -84,24 +80,21 @@ function App() {
   const randomAnecdote = () => {
     const randomValue = generateRandomNumber();
     setRandomValue(randomValue);
-    const { getAnecdote, getVotes } = searchAnecdote();
-    //FIX
+
+            
   }
 
-  const searchAnecdote = () =>{
-    const getAnecdote = anecdotes[randomValue].anecdote;
-    console.log("This is the getAnecdote:", getAnecdote)
-    const getVotes = anecdotes[randomValue].vote;
-    console.log("This is the getVotes:", getVotes)
+  // const searchAnecdote = () =>{
+  //   const getAnecdote = anecdotes[randomValue].anecdote;
+  //   console.log("This is the getAnecdote:", getAnecdote)
+  //   const getVotes = anecdotes[randomValue].vote;
+  //   console.log("This is the getVotes:", getVotes)
     
-    return{
-      getAnecdote,
-      getVotes
-    }
-      
-    
-
-  }
+  //   return{
+  //     getAnecdote,
+  //     getVotes
+  //   }
+  // }
 
   const voteAnecdote = () =>{
     const updatedAnecdotes = [...anecdotes];
@@ -109,15 +102,23 @@ function App() {
     updatedAnecdotes[randomValue].vote += 1;
 
     setAnecdotes(updatedAnecdotes);
+    console.log(updatedAnecdotes)
 
   }
   
   return (
     <>
-      <Header name={"Random Anecdotes App"} />
-      <Button onClick={randomAnecdote} text={"Random anecdote"}/>
-      <Header name={"Anecdote: "} />
-      <Content anecdote={anecdote} vote={vote} onClick={voteAnecdote}/>
+      <Header 
+          name={"Random Anecdotes App"} />
+      <Button 
+          onClick={randomAnecdote} text={"Random anecdote"}/>
+      <Header 
+          name={"Anecdote: "} />
+      <Content
+          anecdote={anecdotes[randomValue].anecdote}
+          vote={anecdotes[randomValue].vote}
+          onClick={voteAnecdote}
+        />
     </>
   )
 }
