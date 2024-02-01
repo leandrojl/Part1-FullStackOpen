@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Content = (props) =>{
+const RandomAnecdote = (props) =>{
 
   
   
@@ -15,6 +15,32 @@ const Content = (props) =>{
   
   
     
+  }
+
+  const Statistics = (props) =>{
+
+      let maxVotes = -1;
+      console.log("max votes at the beggining",maxVotes)
+
+      let mostVotedAnecdote = null;
+
+      console.log("most voted at the beggining",mostVotedAnecdote)
+  
+      props.anecdotes.forEach((anecdote) => {
+        if (anecdote.vote > maxVotes) {
+          maxVotes = anecdote.vote;
+          console.log("max votes at the foreach loop",maxVotes)
+          mostVotedAnecdote = anecdote;
+          console.log("most voted at the foreach loop",mostVotedAnecdote)
+        }
+      });
+  
+    return(
+      <div>
+        <p>{mostVotedAnecdote.anecdote}</p>
+        <p>This anecdote has: {mostVotedAnecdote.vote} votes so far!</p>
+      </div>
+    )
   }
 
 const Button = (props) =>{
@@ -105,6 +131,8 @@ function App() {
     console.log(updatedAnecdotes)
 
   }
+
+  
   
   return (
     <>
@@ -114,11 +142,14 @@ function App() {
           onClick={randomAnecdote} text={"Random anecdote"}/>
       <Header 
           name={"Anecdote: "} />
-      <Content
+      <RandomAnecdote
           anecdote={anecdotes[randomValue].anecdote}
           vote={anecdotes[randomValue].vote}
           onClick={voteAnecdote}
         />
+        <Header 
+          name={"Anecdote with most votes: "} />
+        <Statistics anecdotes={anecdotes}/>
     </>
   )
 }
